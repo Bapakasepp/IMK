@@ -116,12 +116,12 @@
         <div class="section-link">Semua →</div>
       </div>
       <div class="cats-scroll">
-        <div class="cat-chip active" onclick="filterCat(this, 'Semua')"><div class="cat-icon">🏬</div><div class="cat-label">Semua</div></div>
-        <div class="cat-chip" onclick="filterCat(this, 'Fashion')"><div class="cat-icon">👗</div><div class="cat-label">Fashion</div></div>
-        <div class="cat-chip" onclick="filterCat(this, 'Elektronik')"><div class="cat-icon">📱</div><div class="cat-label">Elektronik</div></div>
-        <div class="cat-chip" onclick="filterCat(this, 'Kuliner')"><div class="cat-icon">🍜</div><div class="cat-label">Kuliner</div></div>
-        <div class="cat-chip" onclick="filterCat(this, 'Kerajinan')"><div class="cat-icon">🏺</div><div class="cat-label">Kerajinan</div></div>
-        <div class="cat-chip" onclick="filterCat(this, 'Kecantikan')"><div class="cat-icon">💄</div><div class="cat-label">Kecantikan</div></div>
+        <div class="cat-chip active" onclick="filterCat(this, 'Semua', 'semua')"><div class="cat-icon">🏬</div><div class="cat-label">Semua</div></div>
+        <div class="cat-chip" onclick="filterCat(this, 'Fashion', 'fashion')"><div class="cat-icon">👗</div><div class="cat-label">Fashion</div></div>
+        <div class="cat-chip" onclick="filterCat(this, 'Elektronik', 'elektronik')"><div class="cat-icon">📱</div><div class="cat-label">Elektronik</div></div>
+        <div class="cat-chip" onclick="filterCat(this, 'Kuliner', 'kuliner')"><div class="cat-icon">🍜</div><div class="cat-label">Kuliner</div></div>
+        <div class="cat-chip" onclick="filterCat(this, 'Kerajinan', 'kerajinan')"><div class="cat-icon">🏺</div><div class="cat-label">Kerajinan</div></div>
+        <div class="cat-chip" onclick="filterCat(this, 'Kecantikan', 'kecantikan')"><div class="cat-icon">💄</div><div class="cat-label">Kecantikan</div></div>
       </div>
 
       <!-- Produk Grid -->
@@ -130,7 +130,7 @@
         <div class="section-link" onclick="showToast('📋 Lihat semua produk')">Lihat semua →</div>
       </div>
       <div class="products-grid" id="products-grid">
-        <div class="product-card" onclick="goTo('detail')">
+        <div class="product-card" data-cat="fashion" onclick="goTo('detail')">
           <div class="product-img" style="background:linear-gradient(135deg,#e8f0fd,#b5d4f4);">
             👘
             <div class="product-badge">-26%</div>
@@ -150,7 +150,7 @@
             <div class="product-ongkir">✓ Gratis ongkir</div>
           </div>
         </div>
-        <div class="product-card" onclick="goTo('detail')">
+        <div class="product-card" data-cat="elektronik" onclick="goTo('detail')">
           <div class="product-img" style="background:linear-gradient(135deg,#e1f5ee,#9fe1cb);">
             🎧
             <div class="product-verified">✓ Garansi</div>
@@ -168,7 +168,7 @@
             <div class="product-ongkir">🚚 Tiba 2-3 hari</div>
           </div>
         </div>
-        <div class="product-card" onclick="goTo('detail')">
+        <div class="product-card" data-cat="kuliner" onclick="goTo('detail')">
           <div class="product-img" style="background:linear-gradient(135deg,#fff3ec,#fbbf24);">
             🍜
             <div class="product-badge">HOT</div>
@@ -186,7 +186,7 @@
             <div class="product-ongkir">🍴 Pesan antar</div>
           </div>
         </div>
-        <div class="product-card" onclick="goTo('detail')">
+        <div class="product-card" data-cat="kecantikan" onclick="goTo('detail')">
           <div class="product-img" style="background:linear-gradient(135deg,#fbeaf0,#f4c0d1);">
             💄
             <div class="product-badge">-35%</div>
@@ -206,6 +206,406 @@
             <div class="product-ongkir">✓ Gratis ongkir</div>
           </div>
         </div>
+        <div class="product-card" data-cat="fashion" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#eef2ff,#c7d2fe);">
+            👕
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl5" onclick="event.stopPropagation(); toggleWish('wl5','Kaos Batik Modern')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Kaos Batik Modern Pria Unisex</div>
+            <div>
+              <span class="product-price">Rp 79.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 156 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 2-3 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="elektronik" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#f0fdf4,#bbf7d0);">
+            🔊
+            <div class="product-badge">-18%</div>
+            <div class="product-verified">✓ Garansi</div>
+            <button class="wishlist-btn" id="wl6" onclick="event.stopPropagation(); toggleWish('wl6','Speaker Bluetooth Mini')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Speaker Bluetooth Mini Waterproof</div>
+            <div>
+              <span class="product-price">Rp 145.000</span>
+              <span class="product-old-price">Rp 177.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 503 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kuliner" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#fefce8,#fde68a);">
+            🍟
+            <button class="wishlist-btn" id="wl7" onclick="event.stopPropagation(); toggleWish('wl7','Keripik Tempe Renyah')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Keripik Tempe Renyah Original</div>
+            <div>
+              <span class="product-price">Rp 18.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 674 terjual</span>
+            </div>
+            <div class="product-ongkir">🍴 Pesan antar</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kerajinan" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#fff7ed,#fed7aa);">
+            🏺
+            <div class="product-verified">✓ Handmade</div>
+            <button class="wishlist-btn" id="wl8" onclick="event.stopPropagation(); toggleWish('wl8','Vas Keramik Tanah Liat')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Vas Keramik Tanah Liat Klasik</div>
+            <div>
+              <span class="product-price">Rp 120.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 89 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 3-5 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kerajinan" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#f5f5f4,#e7e5e4);">
+            🧺
+            <div class="product-badge">-12%</div>
+            <div class="product-verified">✓ Handmade</div>
+            <button class="wishlist-btn" id="wl9" onclick="event.stopPropagation(); toggleWish('wl9','Anyaman Rotan Multifungsi')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Anyaman Rotan Multifungsi</div>
+            <div>
+              <span class="product-price">Rp 95.000</span>
+              <span class="product-old-price">Rp 108.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 64 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 3-5 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kecantikan" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#f0fdfa,#99f6e4);">
+            🧖‍♀️
+            <div class="product-verified">✓ BPOM</div>
+            <button class="wishlist-btn" id="wl10" onclick="event.stopPropagation(); toggleWish('wl10','Masker Wajah Charcoal')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Masker Wajah Charcoal Detox</div>
+            <div>
+              <span class="product-price">Rp 65.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 421 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+
+        <!-- Fashion tambahan -->
+        <div class="product-card" data-cat="fashion" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#fdf2f8,#fbcfe8);">
+            🧕
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl11" onclick="event.stopPropagation(); toggleWish('wl11','Hijab Voal Premium')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Hijab Voal Premium Motif Bunga</div>
+            <div>
+              <span class="product-price">Rp 45.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 738 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fashion" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#f1f5f9,#cbd5e1);">
+            👟
+            <div class="product-badge">-15%</div>
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl12" onclick="event.stopPropagation(); toggleWish('wl12','Sepatu Sneakers Kanvas')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Sepatu Sneakers Kanvas Lokal</div>
+            <div>
+              <span class="product-price">Rp 175.000</span>
+              <span class="product-old-price">Rp 205.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 289 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 2-3 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fashion" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#fff7ed,#fdba74);">
+            👜
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl13" onclick="event.stopPropagation(); toggleWish('wl13','Tas Selempang Kulit')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Tas Selempang Kulit Sintetis</div>
+            <div>
+              <span class="product-price">Rp 129.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 174 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 2-3 hari</div>
+          </div>
+        </div>
+
+        <!-- Elektronik tambahan -->
+        <div class="product-card" data-cat="elektronik" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#eef2ff,#c7d2fe);">
+            🔋
+            <div class="product-verified">✓ Garansi</div>
+            <button class="wishlist-btn" id="wl14" onclick="event.stopPropagation(); toggleWish('wl14','Power Bank 10000mAh')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Power Bank 10000mAh Fast Charging</div>
+            <div>
+              <span class="product-price">Rp 159.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 612 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="elektronik" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#ecfeff,#a5f3fc);">
+            ⌚
+            <div class="product-badge">-20%</div>
+            <div class="product-verified">✓ Garansi</div>
+            <button class="wishlist-btn" id="wl15" onclick="event.stopPropagation(); toggleWish('wl15','Smartwatch Fitness Tracker')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Smartwatch Fitness Tracker</div>
+            <div>
+              <span class="product-price">Rp 225.000</span>
+              <span class="product-old-price">Rp 280.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 347 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="elektronik" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#f5f3ff,#ddd6fe);">
+            🔌
+            <button class="wishlist-btn" id="wl16" onclick="event.stopPropagation(); toggleWish('wl16','Kabel Data USB-C Braided')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Kabel Data USB-C Braided 1.5m</div>
+            <div>
+              <span class="product-price">Rp 29.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 958 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 2-3 hari</div>
+          </div>
+        </div>
+
+        <!-- Kuliner tambahan -->
+        <div class="product-card" data-cat="kuliner" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#efebe9,#bcaaa4);">
+            ☕
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl17" onclick="event.stopPropagation(); toggleWish('wl17','Kopi Robusta Lampung')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Kopi Robusta Lampung Bubuk 250g</div>
+            <div>
+              <span class="product-price">Rp 42.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 513 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kuliner" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#fff1f2,#fecdd3);">
+            🍖
+            <div class="product-badge">HOT</div>
+            <button class="wishlist-btn" id="wl18" onclick="event.stopPropagation(); toggleWish('wl18','Rendang Daging Sapi')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Rendang Daging Sapi Kemasan</div>
+            <div>
+              <span class="product-price">Rp 55.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 302 terjual</span>
+            </div>
+            <div class="product-ongkir">🍴 Pesan antar</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kuliner" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#fefce8,#fef08a);">
+            🍰
+            <div class="product-verified">✓ Halal</div>
+            <button class="wishlist-btn" id="wl19" onclick="event.stopPropagation(); toggleWish('wl19','Kue Lapis Legit Premium')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Kue Lapis Legit Premium</div>
+            <div>
+              <span class="product-price">Rp 95.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 187 terjual</span>
+            </div>
+            <div class="product-ongkir">🍴 Pesan antar</div>
+          </div>
+        </div>
+
+        <!-- Kerajinan tambahan -->
+        <div class="product-card" data-cat="kerajinan" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#fef3c7,#fcd34d);">
+            🪵
+            <div class="product-verified">✓ Handmade</div>
+            <button class="wishlist-btn" id="wl20" onclick="event.stopPropagation(); toggleWish('wl20','Ukiran Kayu Jati Miniatur')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Ukiran Kayu Jati Miniatur</div>
+            <div>
+              <span class="product-price">Rp 150.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 47 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 3-5 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kerajinan" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#faf5ff,#e9d5ff);">
+            🎭
+            <div class="product-badge">Limited</div>
+            <div class="product-verified">✓ Handmade</div>
+            <button class="wishlist-btn" id="wl21" onclick="event.stopPropagation(); toggleWish('wl21','Wayang Kulit Mini Koleksi')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Wayang Kulit Mini Koleksi</div>
+            <div>
+              <span class="product-price">Rp 210.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 31 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 3-5 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kerajinan" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#ecfdf5,#a7f3d0);">
+            👛
+            <div class="product-verified">✓ Handmade</div>
+            <button class="wishlist-btn" id="wl22" onclick="event.stopPropagation(); toggleWish('wl22','Tas Anyaman Pandan')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Tas Anyaman Pandan Handmade</div>
+            <div>
+              <span class="product-price">Rp 85.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 76 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 3-5 hari</div>
+          </div>
+        </div>
+
+        <!-- Kecantikan tambahan -->
+        <div class="product-card" data-cat="kecantikan" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#fff7ed,#fed7aa);">
+            🧴
+            <div class="product-verified">✓ BPOM</div>
+            <button class="wishlist-btn" id="wl23" onclick="event.stopPropagation(); toggleWish('wl23','Lulur Tradisional Rempah Bali')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Lulur Tradisional Rempah Bali</div>
+            <div>
+              <span class="product-price">Rp 38.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 265 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kecantikan" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#fdf2f8,#fbcfe8);">
+            💋
+            <div class="product-badge">-10%</div>
+            <div class="product-verified">✓ BPOM</div>
+            <button class="wishlist-btn" id="wl24" onclick="event.stopPropagation(); toggleWish('wl24','Lipstik Matte Lokal')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Lipstik Matte Lokal Tahan Lama</div>
+            <div>
+              <span class="product-price">Rp 55.000</span>
+              <span class="product-old-price">Rp 61.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 819 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kecantikan" onclick="goTo('detail')">
+          <div class="product-img" style="background:linear-gradient(135deg,#f0fdf4,#bbf7d0);">
+            🧼
+            <div class="product-verified">✓ BPOM</div>
+            <button class="wishlist-btn" id="wl25" onclick="event.stopPropagation(); toggleWish('wl25','Sabun Wajah Herbal Alami')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Sabun Wajah Herbal Alami</div>
+            <div>
+              <span class="product-price">Rp 28.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 456 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+      </div>
+      <div class="empty-cat" id="empty-cat" style="display:none; text-align:center; padding:30px 16px; color:var(--text-3); font-size:13px;">
+        😕 Belum ada produk di kategori ini
       </div>
 
       <!-- Penjual Terdekat -->

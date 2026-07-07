@@ -42,10 +42,22 @@ function setRole(role) {
   document.getElementById('role-'+role).classList.add('active');
 }
 
-function filterCat(el, name) {
+function filterCat(el, name, key) {
   document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  showToast('📂 Kategori: ' + name);
+
+  const cards = document.querySelectorAll('#products-grid .product-card');
+  let visibleCount = 0;
+  cards.forEach(card => {
+    const match = key === 'semua' || card.dataset.cat === key;
+    card.style.display = match ? '' : 'none';
+    if (match) visibleCount++;
+  });
+
+  const empty = document.getElementById('empty-cat');
+  if (empty) empty.style.display = visibleCount === 0 ? 'block' : 'none';
+
+  showToast('📂 Kategori: ' + name + (visibleCount ? ' · ' + visibleCount + ' produk' : ''));
 }
 
 function setNav(i) {
