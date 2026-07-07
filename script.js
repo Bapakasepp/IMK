@@ -481,8 +481,7 @@ function changeQty(delta) {
   qty = Math.max(1, Math.min(99, qty + Number(delta || 0)));
   const qtyEl = $('qty-num');
   if (qtyEl) qtyEl.textContent = qty;
-  const product = selectedProduct || productCatalog.batik;
-  const price = getUnitPrice({ id: product.id, price: product.price, qty });
+  const price = getUnitPrice({ id: 'batik', price: productCatalog.batik.price, qty });
   if (qty >= 6) showToast('💰 Harga grosir berlaku! ' + formatRupiah(price) + '/pcs');
 }
 
