@@ -111,10 +111,6 @@ function logoutUser() {
   } catch (_) {}
   currentUserName = 'Rina Dewi';
   cartItems = [];
-  const order = { id: 'PK' + Date.now().toString().slice(-6), qty: totals.qty, total: totals.total, status: 'Diproses penjual', time: 'Baru saja' };
-  orderHistory.unshift(order);
-  saveOrderHistory();
-  addNotification('order', '✅', 'Checkout berhasil #' + order.id, 'Pesanan ' + totals.qty + ' barang berhasil dibuat dengan total ' + formatRupiah(totals.total) + '.', 'Baru saja');
   checkoutItems = null;
   checkoutSource = 'default';
   selectedPay = 'gopay';
@@ -485,7 +481,8 @@ function changeQty(delta) {
   qty = Math.max(1, Math.min(99, qty + Number(delta || 0)));
   const qtyEl = $('qty-num');
   if (qtyEl) qtyEl.textContent = qty;
-  const price = getUnitPrice({ id: 'batik', price: productCatalog.batik.price, qty });
+  const product = selectedProduct || productCatalog.batik;
+  const price = getUnitPrice({ id: product.id, price: product.price, qty });
   if (qty >= 6) showToast('💰 Harga grosir berlaku! ' + formatRupiah(price) + '/pcs');
 }
 
