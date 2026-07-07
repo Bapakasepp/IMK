@@ -111,6 +111,10 @@ function logoutUser() {
   } catch (_) {}
   currentUserName = 'Rina Dewi';
   cartItems = [];
+  const order = { id: 'PK' + Date.now().toString().slice(-6), qty: totals.qty, total: totals.total, status: 'Diproses penjual', time: 'Baru saja' };
+  orderHistory.unshift(order);
+  saveOrderHistory();
+  addNotification('order', '✅', 'Checkout berhasil #' + order.id, 'Pesanan ' + totals.qty + ' barang berhasil dibuat dengan total ' + formatRupiah(totals.total) + '.', 'Baru saja');
   checkoutItems = null;
   checkoutSource = 'default';
   selectedPay = 'gopay';
