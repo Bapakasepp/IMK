@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PasarKita — Marketplace Lokal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+<div class="phone">
+  <div class="notch"></div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== SPLASH ===== -->
+  <div class="screen active" id="screen-splash">
+    <div class="splash-icon">🛍️</div>
+    <div class="splash-title">Pasar<span>Kita</span></div>
+    <div class="splash-sub">Marketplace lokal terpercaya — belanja mudah, jualan lebih laris</div>
+    <div class="splash-dots">
+      <div class="splash-dot"></div>
+      <div class="splash-dot on"></div>
+      <div class="splash-dot"></div>
+    </div>
+    <button class="splash-btn" onclick="goTo('signup')">Mulai Belanja →</button>
+    <div style="margin-top:10px; cursor:pointer; color:rgba(255,255,255,0.6); font-size:13px;" onclick="goTo('home')">Lewati &rsaquo;</div>
+  </div>
+
+  <!-- ===== SIGNUP ===== -->
+  <div class="screen" id="screen-signup">
+    <div class="scroll-body" style="padding-bottom:20px;">
+      <div class="auth-wrap">
+        <div class="auth-hero">
+          <div style="font-size:36px; margin-bottom:8px;">👋</div>
+          <h2>Daftar Sekarang</h2>
+          <p>Buat akun untuk mulai berbelanja</p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <div class="form-label">Masuk sebagai</div>
+          <div class="role-toggle">
+            <div class="role-btn active" id="role-buyer" onclick="setRole('buyer')">
+              <div class="role-btn-icon">🛒</div>
+              <div class="role-btn-label">Pembeli</div>
+            </div>
+            <div class="role-btn" id="role-seller" onclick="setRole('seller')">
+              <div class="role-btn-icon">🏪</div>
+              <div class="role-btn-label">Penjual</div>
+            </div>
+            <div class="role-btn" id="role-reseller" onclick="setRole('reseller')">
+              <div class="role-btn-icon">📦</div>
+              <div class="role-btn-label">Reseller</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Nama Lengkap</div>
+          <input class="form-input" id="user-fullname" type="text" placeholder="Contoh: Rina Dewi" value="" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Username</div>
+          <input class="form-input" id="user-username" type="text" placeholder="username unik kamu" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Email</div>
+          <input class="form-input" type="email" placeholder="email@contoh.com">
+        </div>
+        <div class="form-group">
+          <div class="form-label">Password</div>
+          <input class="form-input" type="password" placeholder="Min. 8 karakter">
+        </div>
+        <button class="btn-primary" onclick="loginUser()">Buat Akun →</button>
+        <div class="divider"><div class="divider-line"></div><div class="divider-text">atau</div><div class="divider-line"></div></div>
+        <button class="btn-outline" onclick="loginUser(true)">🔵 Lanjut dengan Google</button>
+        <div class="auth-footer">Sudah punya akun? <a onclick="loginUser()">Masuk di sini</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HOME ===== -->
+  <div class="screen" id="screen-home">
+    <div class="scroll-body">
+      <div class="home-header">
+        <div class="home-greeting" id="home-greeting">Selamat pagi 👋</div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div class="home-name" data-user-name>Rina Dewi</div>
+          <div style="display:flex; gap:8px;">
+            <button class="icon-btn" style="background:rgba(255,255,255,0.15); color:white;" onclick="openNotifications()">🔔<div class="badge-dot" id="notif-dot"></div></button>
+          </div>
+        </div>
+        <div class="home-search">
+          <div class="search-input-wrap" onclick="showToast('🔍 Ketik untuk mencari produk')">
+            <span>🔍</span>
+            <span class="search-placeholder">Cari batik, elektronik, fashion...</span>
+          </div>
+          <div class="search-icon-wrap" onclick="showToast('🎛️ Filter produk')">🎛️</div>
+        </div>
+      </div>
+
+      <!-- Promo Banner -->
+      <div class="promo-banner" onclick="openFlashSale()">
+        <div>
+          <div class="promo-badge">FLASH SALE</div>
+          <div class="promo-title">Hemat hingga 40%</div>
+          <div class="promo-sub"><span id="flash-countdown-home">Berakhir dalam 3j 24m</span> &nbsp;·&nbsp; <span id="flash-product-count">128 produk</span></div>
+        </div>
+      </div>
+
+      <!-- Ringkasan Keranjang -->
+      <div class="cart-summary-card" onclick="goTo('cart')">
+        <div class="cart-summary-icon">🛒</div>
+        <div class="cart-summary-info">
+          <div class="cart-summary-title">Keranjang Belanja</div>
+          <div class="cart-summary-sub"><span id="home-cart-count">0 barang</span> · <span id="home-cart-total">Rp 0</span></div>
+        </div>
+        <button class="cart-summary-btn" onclick="event.stopPropagation(); goTo('cart')">Lihat</button>
+      </div>
+
+      <!-- Kategori -->
+      <div class="section-header">
+        <div class="section-title">Kategori</div>
+        <div class="section-link">Semua →</div>
+      </div>
+      <div class="cats-scroll">
+        <div class="cat-chip active" onclick="filterCat(this, 'Semua', 'semua')"><div class="cat-icon">🏬</div><div class="cat-label">Semua</div></div>
+        <div class="cat-chip" onclick="filterCat(this, 'Fashion', 'fashion')"><div class="cat-icon">👗</div><div class="cat-label">Fashion</div></div>
+        <div class="cat-chip" onclick="filterCat(this, 'Elektronik', 'elektronik')"><div class="cat-icon">📱</div><div class="cat-label">Elektronik</div></div>
+        <div class="cat-chip" onclick="filterCat(this, 'Kuliner', 'kuliner')"><div class="cat-icon">🍜</div><div class="cat-label">Kuliner</div></div>
+        <div class="cat-chip" onclick="filterCat(this, 'Kerajinan', 'kerajinan')"><div class="cat-icon">🏺</div><div class="cat-label">Kerajinan</div></div>
+        <div class="cat-chip" onclick="filterCat(this, 'Kecantikan', 'kecantikan')"><div class="cat-icon">💄</div><div class="cat-label">Kecantikan</div></div>
+      </div>
+
+      <!-- Produk Grid -->
+      <div class="section-header">
+        <div class="section-title">Produk Terpopuler</div>
+        <div class="section-link" onclick="showToast('📋 Lihat semua produk')">Lihat semua →</div>
+      </div>
+      <div class="products-grid" id="products-grid">
+        <div class="product-card" data-cat="fashion" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#e8f0fd,#b5d4f4);">
+            👘
+            <div class="product-badge">-26%</div>
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl1" onclick="event.stopPropagation(); toggleWish('wl1','Batik Tulis Premium')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Batik Tulis Premium Motif Parang</div>
+            <div>
+              <span class="product-price">Rp 185.000</span>
+              <span class="product-old-price">Rp 250.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 342 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="elektronik" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#e1f5ee,#9fe1cb);">
+            🎧
+            <div class="product-verified">✓ Garansi</div>
+            <button class="wishlist-btn liked" id="wl2" onclick="event.stopPropagation(); toggleWish('wl2','Earphone TWS Pro')">❤️</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Earphone TWS Pro Noise Cancel</div>
+            <div>
+              <span class="product-price">Rp 299.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 210 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 2-3 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kuliner" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fff3ec,#fbbf24);">
+            🍜
+            <div class="product-badge">HOT</div>
+            <button class="wishlist-btn" id="wl3" onclick="event.stopPropagation(); toggleWish('wl3','Mie Ayam Pak Budi')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Mie Ayam Pak Budi Khas Jogja</div>
+            <div>
+              <span class="product-price">Rp 35.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 892 terjual</span>
+            </div>
+            <div class="product-ongkir">🍴 Pesan antar</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kecantikan" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fbeaf0,#f4c0d1);">
+            💄
+            <div class="product-badge">-35%</div>
+            <div class="product-verified">✓ BPOM</div>
+            <button class="wishlist-btn" id="wl4" onclick="event.stopPropagation(); toggleWish('wl4','Serum Vitamin C')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Serum Vitamin C Niacinamide</div>
+            <div>
+              <span class="product-price">Rp 89.000</span>
+              <span class="product-old-price">Rp 137.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 1.2k terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fashion" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#eef2ff,#c7d2fe);">
+            👕
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl5" onclick="event.stopPropagation(); toggleWish('wl5','Kaos Batik Modern')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Kaos Batik Modern Pria Unisex</div>
+            <div>
+              <span class="product-price">Rp 79.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 156 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 2-3 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="elektronik" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#f0fdf4,#bbf7d0);">
+            🔊
+            <div class="product-badge">-18%</div>
+            <div class="product-verified">✓ Garansi</div>
+            <button class="wishlist-btn" id="wl6" onclick="event.stopPropagation(); toggleWish('wl6','Speaker Bluetooth Mini')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Speaker Bluetooth Mini Waterproof</div>
+            <div>
+              <span class="product-price">Rp 145.000</span>
+              <span class="product-old-price">Rp 177.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 503 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kuliner" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fefce8,#fde68a);">
+            🍟
+            <button class="wishlist-btn" id="wl7" onclick="event.stopPropagation(); toggleWish('wl7','Keripik Tempe Renyah')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Keripik Tempe Renyah Original</div>
+            <div>
+              <span class="product-price">Rp 18.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 674 terjual</span>
+            </div>
+            <div class="product-ongkir">🍴 Pesan antar</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kerajinan" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fff7ed,#fed7aa);">
+            🏺
+            <div class="product-verified">✓ Handmade</div>
+            <button class="wishlist-btn" id="wl8" onclick="event.stopPropagation(); toggleWish('wl8','Vas Keramik Tanah Liat')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Vas Keramik Tanah Liat Klasik</div>
+            <div>
+              <span class="product-price">Rp 120.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 89 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 3-5 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kerajinan" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#f5f5f4,#e7e5e4);">
+            🧺
+            <div class="product-badge">-12%</div>
+            <div class="product-verified">✓ Handmade</div>
+            <button class="wishlist-btn" id="wl9" onclick="event.stopPropagation(); toggleWish('wl9','Anyaman Rotan Multifungsi')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Anyaman Rotan Multifungsi</div>
+            <div>
+              <span class="product-price">Rp 95.000</span>
+              <span class="product-old-price">Rp 108.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 64 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 3-5 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kecantikan" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#f0fdfa,#99f6e4);">
+            🧖‍♀️
+            <div class="product-verified">✓ BPOM</div>
+            <button class="wishlist-btn" id="wl10" onclick="event.stopPropagation(); toggleWish('wl10','Masker Wajah Charcoal')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Masker Wajah Charcoal Detox</div>
+            <div>
+              <span class="product-price">Rp 65.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 421 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+
+        <!-- Fashion tambahan -->
+        <div class="product-card" data-cat="fashion" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fdf2f8,#fbcfe8);">
+            🧕
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl11" onclick="event.stopPropagation(); toggleWish('wl11','Hijab Voal Premium')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Hijab Voal Premium Motif Bunga</div>
+            <div>
+              <span class="product-price">Rp 45.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 738 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fashion" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#f1f5f9,#cbd5e1);">
+            👟
+            <div class="product-badge">-15%</div>
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl12" onclick="event.stopPropagation(); toggleWish('wl12','Sepatu Sneakers Kanvas')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Sepatu Sneakers Kanvas Lokal</div>
+            <div>
+              <span class="product-price">Rp 175.000</span>
+              <span class="product-old-price">Rp 205.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 289 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 2-3 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fashion" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fff7ed,#fdba74);">
+            👜
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl13" onclick="event.stopPropagation(); toggleWish('wl13','Tas Selempang Kulit')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Tas Selempang Kulit Sintetis</div>
+            <div>
+              <span class="product-price">Rp 129.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 174 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 2-3 hari</div>
+          </div>
+        </div>
+
+        <!-- Elektronik tambahan -->
+        <div class="product-card" data-cat="elektronik" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#eef2ff,#c7d2fe);">
+            🔋
+            <div class="product-verified">✓ Garansi</div>
+            <button class="wishlist-btn" id="wl14" onclick="event.stopPropagation(); toggleWish('wl14','Power Bank 10000mAh')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Power Bank 10000mAh Fast Charging</div>
+            <div>
+              <span class="product-price">Rp 159.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 612 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="elektronik" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#ecfeff,#a5f3fc);">
+            ⌚
+            <div class="product-badge">-20%</div>
+            <div class="product-verified">✓ Garansi</div>
+            <button class="wishlist-btn" id="wl15" onclick="event.stopPropagation(); toggleWish('wl15','Smartwatch Fitness Tracker')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Smartwatch Fitness Tracker</div>
+            <div>
+              <span class="product-price">Rp 225.000</span>
+              <span class="product-old-price">Rp 280.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 347 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="elektronik" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#f5f3ff,#ddd6fe);">
+            🔌
+            <button class="wishlist-btn" id="wl16" onclick="event.stopPropagation(); toggleWish('wl16','Kabel Data USB-C Braided')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Kabel Data USB-C Braided 1.5m</div>
+            <div>
+              <span class="product-price">Rp 29.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 958 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 2-3 hari</div>
+          </div>
+        </div>
+
+        <!-- Kuliner tambahan -->
+        <div class="product-card" data-cat="kuliner" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#efebe9,#bcaaa4);">
+            ☕
+            <div class="product-verified">✓ Asli</div>
+            <button class="wishlist-btn" id="wl17" onclick="event.stopPropagation(); toggleWish('wl17','Kopi Robusta Lampung')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Kopi Robusta Lampung Bubuk 250g</div>
+            <div>
+              <span class="product-price">Rp 42.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 513 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kuliner" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fff1f2,#fecdd3);">
+            🍖
+            <div class="product-badge">HOT</div>
+            <button class="wishlist-btn" id="wl18" onclick="event.stopPropagation(); toggleWish('wl18','Rendang Daging Sapi')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Rendang Daging Sapi Kemasan</div>
+            <div>
+              <span class="product-price">Rp 55.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 302 terjual</span>
+            </div>
+            <div class="product-ongkir">🍴 Pesan antar</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kuliner" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fefce8,#fef08a);">
+            🍰
+            <div class="product-verified">✓ Halal</div>
+            <button class="wishlist-btn" id="wl19" onclick="event.stopPropagation(); toggleWish('wl19','Kue Lapis Legit Premium')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Kue Lapis Legit Premium</div>
+            <div>
+              <span class="product-price">Rp 95.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 187 terjual</span>
+            </div>
+            <div class="product-ongkir">🍴 Pesan antar</div>
+          </div>
+        </div>
+
+        <!-- Kerajinan tambahan -->
+        <div class="product-card" data-cat="kerajinan" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fef3c7,#fcd34d);">
+            🪵
+            <div class="product-verified">✓ Handmade</div>
+            <button class="wishlist-btn" id="wl20" onclick="event.stopPropagation(); toggleWish('wl20','Ukiran Kayu Jati Miniatur')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Ukiran Kayu Jati Miniatur</div>
+            <div>
+              <span class="product-price">Rp 150.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 47 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 3-5 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kerajinan" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#faf5ff,#e9d5ff);">
+            🎭
+            <div class="product-badge">Limited</div>
+            <div class="product-verified">✓ Handmade</div>
+            <button class="wishlist-btn" id="wl21" onclick="event.stopPropagation(); toggleWish('wl21','Wayang Kulit Mini Koleksi')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Wayang Kulit Mini Koleksi</div>
+            <div>
+              <span class="product-price">Rp 210.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 31 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 3-5 hari</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kerajinan" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#ecfdf5,#a7f3d0);">
+            👛
+            <div class="product-verified">✓ Handmade</div>
+            <button class="wishlist-btn" id="wl22" onclick="event.stopPropagation(); toggleWish('wl22','Tas Anyaman Pandan')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Tas Anyaman Pandan Handmade</div>
+            <div>
+              <span class="product-price">Rp 85.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★☆</span>
+              <span class="product-sold">· 76 terjual</span>
+            </div>
+            <div class="product-ongkir">🚚 Tiba 3-5 hari</div>
+          </div>
+        </div>
+
+        <!-- Kecantikan tambahan -->
+        <div class="product-card" data-cat="kecantikan" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fff7ed,#fed7aa);">
+            🧴
+            <div class="product-verified">✓ BPOM</div>
+            <button class="wishlist-btn" id="wl23" onclick="event.stopPropagation(); toggleWish('wl23','Lulur Tradisional Rempah Bali')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Lulur Tradisional Rempah Bali</div>
+            <div>
+              <span class="product-price">Rp 38.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 265 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kecantikan" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#fdf2f8,#fbcfe8);">
+            💋
+            <div class="product-badge">-10%</div>
+            <div class="product-verified">✓ BPOM</div>
+            <button class="wishlist-btn" id="wl24" onclick="event.stopPropagation(); toggleWish('wl24','Lipstik Matte Lokal')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Lipstik Matte Lokal Tahan Lama</div>
+            <div>
+              <span class="product-price">Rp 55.000</span>
+              <span class="product-old-price">Rp 61.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 819 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+        <div class="product-card" data-cat="kecantikan" onclick="openProductFromCard(this)">
+          <div class="product-img" style="background:linear-gradient(135deg,#f0fdf4,#bbf7d0);">
+            🧼
+            <div class="product-verified">✓ BPOM</div>
+            <button class="wishlist-btn" id="wl25" onclick="event.stopPropagation(); toggleWish('wl25','Sabun Wajah Herbal Alami')">🤍</button>
+          </div>
+          <div class="product-info">
+            <div class="product-name">Sabun Wajah Herbal Alami</div>
+            <div>
+              <span class="product-price">Rp 28.000</span>
+            </div>
+            <div class="product-meta">
+              <span class="product-rating">★★★★★</span>
+              <span class="product-sold">· 456 terjual</span>
+            </div>
+            <div class="product-ongkir">✓ Gratis ongkir</div>
+          </div>
+        </div>
+      </div>
+      <div class="empty-cat" id="empty-cat" style="display:none; text-align:center; padding:30px 16px; color:var(--text-3); font-size:13px;">
+        😕 Belum ada produk di kategori ini
+      </div>
+
+      <!-- Penjual Terdekat -->
+      <div class="section-header">
+        <div class="section-title">Toko Dekat Kamu 📍</div>
+        <div class="section-link">Lihat peta →</div>
+      </div>
+      <div class="products-list">
+        <div class="product-row" onclick="openDefaultDetail()">
+          <div class="product-row-img" style="background:#e8f0fd;">🏪</div>
+          <div class="product-row-info">
+            <div class="product-row-name">Toko Batik Adi — Yogyakarta</div>
+            <div class="product-row-price">⭐ 4.9 · Terverifikasi ✓</div>
+            <div class="product-row-meta">482 produk · Balas &lt; 5 mnt</div>
+          </div>
+          <div style="font-size:12px; color:var(--text-3);">0.8 km →</div>
+        </div>
+        <div class="product-row" onclick="openDefaultDetail()">
+          <div class="product-row-img" style="background:#e1f5ee;">🌿</div>
+          <div class="product-row-info">
+            <div class="product-row-name">Herbal Nusantara — Semarang</div>
+            <div class="product-row-price">⭐ 4.8 · Terverifikasi ✓</div>
+            <div class="product-row-meta">210 produk · Balas &lt; 10 mnt</div>
+          </div>
+          <div style="font-size:12px; color:var(--text-3);">1.2 km →</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav" id="nav-home">
+      <button class="nav-item active" onclick="setNav(0)"><div class="nav-icon">🏠</div><div class="nav-label">Beranda</div></button>
+      <button class="nav-item" onclick="setNav(1); goTo('wishlist')"><div class="nav-icon">🤍</div><div class="nav-label">Wishlist</div></button>
+      <button class="nav-item" onclick="openChatInbox()"><div class="nav-icon">💬</div><div class="nav-label">Chat</div></button>
+      <button class="nav-item" onclick="setNav(3); goTo('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profil</div></button>
+    </div>
+  </div>
+
+  <!-- ===== CART ===== -->
+  <div class="screen" id="screen-cart">
+    <div class="header">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <div class="header-title">Keranjang Saya 🛒</div>
+      <button class="icon-btn" onclick="clearCart()">🗑️</button>
+    </div>
+    <div class="scroll-body">
+      <div class="cart-total-card">
+        <div>
+          <div class="cart-total-label">Total Keranjang</div>
+          <div class="cart-total-value" id="cart-screen-total">Rp 0</div>
+          <div class="cart-total-sub"><span id="cart-screen-count">0 barang</span> siap checkout</div>
+        </div>
+        <div class="cart-total-emoji">🛍️</div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">Daftar Belanja</div>
+        <div class="section-link" onclick="goTo('home')">Tambah produk →</div>
+      </div>
+
+      <div id="cart-items" class="cart-items"></div>
+      <div class="empty-state" id="cart-empty">
+        <div class="empty-icon">🛒</div>
+        <div class="empty-title">Keranjang masih kosong</div>
+        <div class="empty-sub">Tambahkan produk dari halaman detail, lalu jumlah barang dan total harga akan dihitung otomatis.</div>
+        <button class="full-btn" onclick="goTo('home')">Mulai Belanja</button>
+      </div>
+    </div>
+    <div class="bottom-action cart-bottom">
+      <div class="cart-bottom-info">
+        <div class="cart-bottom-label">Total Bayar</div>
+        <div class="cart-bottom-total" id="cart-bottom-total">Rp 0</div>
+      </div>
+      <button class="btn-buy" id="cart-checkout-btn" onclick="checkoutCart()">Checkout</button>
+    </div>
+  </div>
+
+  <!-- ===== DETAIL ===== -->
+  <div class="screen" id="screen-detail">
+    <div class="header">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <div class="header-title">Detail Produk</div>
+      <button class="icon-btn" onclick="showToast('🔗 Link disalin!')">⎘</button>
+    </div>
+    <div class="scroll-body">
+      <div class="detail-imgs" style="background:linear-gradient(135deg,#e8f0fd,#b5d4f4);">
+        👘
+        <div class="detail-dots">
+          <div class="detail-dot on"></div>
+          <div class="detail-dot"></div>
+          <div class="detail-dot"></div>
+          <div class="detail-dot"></div>
+        </div>
+      </div>
+      <div class="detail-body">
+        <div style="display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap;">
+          <span class="pill pill-success">✓ Terverifikasi</span>
+          <span class="pill pill-blue">Garansi 30 hari</span>
+          <span class="pill pill-amber">Asli Pabrik</span>
+        </div>
+        <div class="detail-name">Batik Tulis Premium Motif Parang — Toko Batik Adi</div>
+        <div class="detail-price-row">
+          <div class="detail-price">Rp 185.000</div>
+          <div class="detail-old">Rp 250.000</div>
+          <div class="detail-disc">-26%</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <span style="font-size:14px; color:var(--warning);">★★★★★</span>
+          <span style="font-size:12px; color:var(--text-2); font-weight:600;">4.9</span>
+          <span style="font-size:12px; color:var(--text-3);">(342 ulasan · 680 terjual)</span>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-icon">🚚</div>
+          <div>
+            <div class="info-card-title">Gratis Ongkir • Estimasi tiba 2–3 hari</div>
+            <div class="info-card-sub">Dari Yogyakarta · JNE / SiCepat / Anteraja</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🛡️</div>
+          <div>
+            <div class="info-card-title">Dilindungi Garansi PasarKita</div>
+            <div class="info-card-sub">Uang kembali jika produk tidak sesuai deskripsi</div>
+          </div>
+        </div>
+
+        <div class="detail-section-title">Pilih Ukuran</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+          <div id="sz-s" class="payment-opt selected" style="padding:8px 16px; flex:none;" onclick="selectSize('S')"><div class="payment-opt-label" style="font-size:13px;">S</div></div>
+          <div id="sz-m" class="payment-opt" style="padding:8px 16px; flex:none;" onclick="selectSize('M')"><div class="payment-opt-label" style="font-size:13px;">M</div></div>
+          <div id="sz-l" class="payment-opt" style="padding:8px 16px; flex:none;" onclick="selectSize('L')"><div class="payment-opt-label" style="font-size:13px;">L</div></div>
+          <div id="sz-xl" class="payment-opt" style="padding:8px 16px; flex:none;" onclick="selectSize('XL')"><div class="payment-opt-label" style="font-size:13px;">XL</div></div>
+        </div>
+
+        <div class="detail-section-title">Jumlah & Harga Grosir</div>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(-1)">−</button>
+          <div class="qty-num" id="qty-num">1</div>
+          <button class="qty-btn" onclick="changeQty(1)">+</button>
+          <div style="margin-left:auto; font-size:13px; color:var(--text-3);">Stok: 47 pcs</div>
+        </div>
+        <table class="tier-table" style="margin-bottom:14px;">
+          <tr><th>Jumlah</th><th>Harga / pcs</th><th>Hemat</th></tr>
+          <tr><td>1–5 pcs</td><td>Rp 185.000</td><td>—</td></tr>
+          <tr><td>6–20 pcs</td><td><strong>Rp 155.000</strong></td><td style="color:var(--success);">16%</td></tr>
+          <tr><td>21+ pcs</td><td><strong>Rp 130.000</strong></td><td style="color:var(--success);">30%</td></tr>
+        </table>
+
+        <div class="detail-section-title">Ulasan Pembeli (342)</div>
+        <div class="review-item">
+          <div class="review-header">
+            <div class="review-avatar" style="background:#1a56db;">RD</div>
+            <div>
+              <div class="review-name">Rina D.</div>
+              <div class="review-stars">★★★★★</div>
+            </div>
+            <div class="review-date">2 hari lalu</div>
+          </div>
+          <div class="review-text">Kualitasnya bagus banget, warnanya cerah dan tidak luntur. Packing rapi, toko responsif. Recommended! 👍</div>
+        </div>
+        <div class="review-item">
+          <div class="review-header">
+            <div class="review-avatar" style="background:#0a9e6d;">NP</div>
+            <div>
+              <div class="review-name">Nita P.</div>
+              <div class="review-stars">★★★★★</div>
+            </div>
+            <div class="review-date">5 hari lalu</div>
+          </div>
+          <div class="review-text">Saya beli 12 pcs untuk dijual lagi. Harga grosir sangat kompetitif. Pengiriman cepat, produk sesuai foto.</div>
+        </div>
+        <button class="full-btn" style="background:none; color:var(--primary); box-shadow:none; border:1.5px solid var(--border); margin-top:8px;" onclick="showToast('📋 Lihat 342 ulasan')">Lihat semua ulasan</button>
+
+        <div class="detail-section-title">Tanya Penjual</div>
+        <div style="background:var(--surface-2); border-radius:var(--radius-md); padding:12px; display:flex; gap:10px; align-items:center; cursor:pointer;" onclick="startChatWithSelectedProduct()">
+          <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--primary-mid)); display:flex; align-items:center; justify-content:center; font-size:18px;">🏪</div>
+          <div style="flex:1;">
+            <div style="font-size:13px; font-weight:700; color:var(--text-1);">Toko Batik Adi</div>
+            <div style="font-size:11px; color:var(--success); font-weight:500;">🟢 Online · Balas &lt; 5 menit</div>
+          </div>
+          <div style="font-size:12px; color:var(--primary); font-weight:600;">Chat →</div>
+        </div>
+        <div style="height:16px;"></div>
+      </div>
+    </div>
+    <div class="bottom-action">
+      <button class="btn-cart" onclick="addSelectedToCart(qty)">+ Keranjang</button>
+      <button class="btn-buy" onclick="buySelectedNow(qty)">Beli Langsung →</button>
+    </div>
+  </div>
+
+  <!-- ===== CHAT ===== -->
+  <div class="screen" id="screen-chat">
+    <div class="chat-header">
+      <button class="back-btn" onclick="chatBack()">←</button>
+      <div class="chat-avatar">🏪</div>
+      <div>
+        <div class="chat-name">Toko Batik Adi</div>
+        <div class="chat-status">🟢 Online · Biasanya balas &lt; 5 mnt</div>
+      </div>
+      <button class="icon-btn" style="margin-left:auto;" onclick="startCallActiveSeller()">📞</button>
+    </div>
+    <div class="chat-list-view" id="chat-list-view">
+      <div class="empty-state" id="chat-empty-state">
+        <div class="empty-icon">💬</div>
+        <div class="empty-title">Belum ada obrolan</div>
+        <div class="empty-sub">Mulai chat dari halaman detail produk agar setiap toko punya slot chat sendiri dan tidak menumpuk.</div>
+        <button class="full-btn" onclick="goTo('home')">Cari Produk</button>
+      </div>
+      <div class="chat-slots" id="chat-slots"></div>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <div style="text-align:center; font-size:11px; color:var(--text-3); padding:4px 0;">Hari ini</div>
+      <div class="msg them">
+        <div class="bubble">Halo kak! Selamat datang di Toko Batik Adi. Ada yang bisa kami bantu? 😊</div>
+        <div class="msg-time">09.30</div>
+      </div>
+      <div class="msg me">
+        <div class="bubble">Halo, apakah Batik Tulis Motif Parang masih ada ukuran L?</div>
+        <div class="msg-time">09.31</div>
+      </div>
+      <div class="msg them">
+        <div class="bubble">Masih ada kak! Ukuran L stok 8 pcs. Untuk warna tersedia biru dongker, coklat, dan merah hati 🎨</div>
+        <div class="msg-time">09.31</div>
+      </div>
+      <div class="msg me">
+        <div class="bubble">Kalau beli 10 pcs bisa dapat harga grosir?</div>
+        <div class="msg-time">09.32</div>
+      </div>
+      <div class="msg them">
+        <div class="bubble">Bisa kak! Untuk 6–20 pcs harga Rp 155.000/pcs, hemat 16% dari harga normal. Mau saya buatkan invoice dulu? 📋</div>
+        <div class="msg-time">09.32</div>
+      </div>
+    </div>
+    <div class="quick-replies" id="quick-replies">
+      <div class="qr-chip" onclick="sendMsg('Stok tersedia?')">Stok tersedia?</div>
+      <div class="qr-chip" onclick="sendMsg('Harga grosir?')">Harga grosir?</div>
+      <div class="qr-chip" onclick="sendMsg('Estimasi pengiriman?')">Estimasi kirim?</div>
+      <div class="qr-chip" onclick="sendMsg('Bisa COD?')">Bisa COD?</div>
+      <div class="qr-chip" onclick="sendMsg('Ada promo?')">Ada promo?</div>
+    </div>
+    <div class="chat-input-bar" id="chat-input-bar">
+      <input class="chat-input" id="chat-input" type="text" placeholder="Ketik pesan..." onkeydown="if(event.key==='Enter') sendChatMsg()">
+      <button class="send-btn" onclick="sendChatMsg()">➤</button>
+    </div>
+  </div>
+
+  <!-- ===== WISHLIST ===== -->
+  <div class="screen" id="screen-wishlist">
+    <div class="header">
+      <div style="width:34px;"></div>
+      <div class="header-title">Wishlist Saya ❤️</div>
+      <button class="icon-btn" onclick="showToast('⚙️ Kelola wishlist')">⚙️</button>
+    </div>
+    <div class="scroll-body">
+      <div class="notif-banner">
+        🔔 <strong>Kabar baik!</strong>&nbsp;Earphone TWS Pro baru saja turun harga!
+      </div>
+      <div class="section-header">
+        <div class="section-title">3 produk disimpan</div>
+        <div class="section-link">Aktifkan semua notif</div>
+      </div>
+      <div class="wish-item" id="wish-item-1">
+        <div class="wish-img" style="background:#e1f5ee;">🎧</div>
+        <div class="wish-info">
+          <div class="wish-name">Earphone TWS Pro Noise Cancel</div>
+          <div class="wish-price">Rp 299.000 <span style="font-size:11px;text-decoration:line-through;color:var(--text-3)">Rp 350.000</span></div>
+          <div class="wish-meta">⭐ 4.7 · 210 terjual</div>
+          <div class="wish-notif">🔔 Notif harga aktif — turun 14%!</div>
+        </div>
+        <div>
+          <button class="wish-del" onclick="removeWish('wish-item-1')">✕</button>
+          <button class="btn-primary" style="width:60px; height:30px; font-size:11px; margin-top:6px;" onclick="openDefaultDetail()">Beli</button>
+        </div>
+      </div>
+      <div class="wish-item" id="wish-item-2">
+        <div class="wish-img" style="background:#fbeaf0;">💄</div>
+        <div class="wish-info">
+          <div class="wish-name">Serum Vitamin C Niacinamide</div>
+          <div class="wish-price">Rp 89.000</div>
+          <div class="wish-meta">⭐ 4.9 · 1.2k terjual</div>
+          <div class="wish-notif">🔔 Notif stok habis aktif</div>
+        </div>
+        <div>
+          <button class="wish-del" onclick="removeWish('wish-item-2')">✕</button>
+          <button class="btn-primary" style="width:60px; height:30px; font-size:11px; margin-top:6px;" onclick="openDefaultDetail()">Beli</button>
+        </div>
+      </div>
+      <div class="wish-item" id="wish-item-3">
+        <div class="wish-img" style="background:#e8f0fd;">👘</div>
+        <div class="wish-info">
+          <div class="wish-name">Batik Tulis Premium Motif Parang</div>
+          <div class="wish-price">Rp 185.000</div>
+          <div class="wish-meta">⭐ 4.9 · 342 terjual</div>
+          <div class="wish-notif">🔔 Notif promo aktif</div>
+        </div>
+        <div>
+          <button class="wish-del" onclick="removeWish('wish-item-3')">✕</button>
+          <button class="btn-primary" style="width:60px; height:30px; font-size:11px; margin-top:6px;" onclick="openDefaultDetail()">Beli</button>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="setNav(0); goTo('home')"><div class="nav-icon">🏠</div><div class="nav-label">Beranda</div></button>
+      <button class="nav-item active" onclick="setNav(1)"><div class="nav-icon">❤️</div><div class="nav-label">Wishlist</div></button>
+      <button class="nav-item" onclick="openChatInbox()"><div class="nav-icon">💬</div><div class="nav-label">Chat</div></button>
+      <button class="nav-item" onclick="setNav(3); goTo('profile')"><div class="nav-icon">👤</div><div class="nav-label">Profil</div></button>
+    </div>
+  </div>
+
+  <!-- ===== PROFILE ===== -->
+  <div class="screen" id="screen-profile">
+    <div class="scroll-body">
+      <div class="profile-hero">
+        <div class="profile-avatar">👩</div>
+        <div class="profile-name" data-user-name>Rina Dewi</div>
+        <div class="profile-badge">⭐ Pembeli Setia · Level Gold</div>
+        <button onclick="editUserName()" style="margin-top:6px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:white; border-radius:20px; padding:6px 16px; font-size:12px; cursor:pointer; font-family:var(--font);">Edit Profil</button>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-item"><div class="stat-num">24</div><div class="stat-label">Pesanan</div></div>
+        <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Wishlist</div></div>
+        <div class="stat-item"><div class="stat-num">8</div><div class="stat-label">Ulasan</div></div>
+      </div>
+      <div class="menu-list">
+        <div style="font-size:11px; font-weight:700; color:var(--text-3); padding:10px 12px 4px; text-transform:uppercase; letter-spacing:0.05em;">Pesanan Saya</div>
+        <div class="menu-item" onclick="openProfileCatalog('activeOrders')">
+          <div class="menu-icon" style="background:#e8f0fd;">📦</div>
+          <div class="menu-text"><div class="menu-label">Pesanan Aktif</div><div class="menu-sub">2 dalam pengiriman</div></div>
+          <span class="menu-badge">2</span>
+          <div class="menu-arrow">›</div>
+        </div>
+        <div class="menu-item" onclick="openProfileCatalog('repeatOrder')">
+          <div class="menu-icon" style="background:#e1f5ee;">🔄</div>
+          <div class="menu-text"><div class="menu-label">Repeat Order</div><div class="menu-sub">Beli ulang dengan 1 tap</div></div>
+          <div class="menu-arrow">›</div>
+        </div>
+        <div class="menu-item" onclick="openProfileCatalog('history')">
+          <div class="menu-icon" style="background:#fffbeb;">🧾</div>
+          <div class="menu-text"><div class="menu-label">Riwayat Pesanan</div><div class="menu-sub">22 transaksi selesai</div></div>
+          <div class="menu-arrow">›</div>
+        </div>
+        <div style="font-size:11px; font-weight:700; color:var(--text-3); padding:10px 12px 4px; text-transform:uppercase; letter-spacing:0.05em;">Pengaturan</div>
+        <div class="menu-item" onclick="openProfileCatalog('addresses')">
+          <div class="menu-icon" style="background:#fbeaf0;">📍</div>
+          <div class="menu-text"><div class="menu-label">Alamat Pengiriman</div><div class="menu-sub">3 alamat tersimpan</div></div>
+          <div class="menu-arrow">›</div>
+        </div>
+        <div class="menu-item" onclick="openProfileCatalog('payments')">
+          <div class="menu-icon" style="background:#eeedfe;">💳</div>
+          <div class="menu-text"><div class="menu-label">Metode Pembayaran</div><div class="menu-sub">GoPay, Transfer BCA, QRIS</div></div>
+          <div class="menu-arrow">›</div>
+        </div>
+        <div class="menu-item" onclick="openProfileCatalog('chats')">
+          <div class="menu-icon" style="background:#e8f0fd;">💬</div>
+          <div class="menu-text"><div class="menu-label">Chat Penjual</div><div class="menu-sub">Lihat toko yang pernah dihubungi</div></div>
+          <div class="menu-arrow">›</div>
+        </div>
+        <div class="menu-item" onclick="openProfileCatalog('discounts')">
+          <div class="menu-icon" style="background:#fff3ec;">🏷️</div>
+          <div class="menu-text"><div class="menu-label">Diskon & Voucher</div><div class="menu-sub">Flash sale dan promo toko</div></div>
+          <div class="menu-arrow">›</div>
+        </div>
+        <div class="menu-item" onclick="goTo('seller')">
+          <div class="menu-icon" style="background:#fff3ec;">🏪</div>
+          <div class="menu-text"><div class="menu-label">Buka Toko Saya</div><div class="menu-sub">Dashboard penjual</div></div>
+          <div class="menu-arrow">›</div>
+        </div>
+        <div class="menu-item" onclick="logoutUser()">
+          <div class="menu-icon" style="background:#fdecea;">🚪</div>
+          <div class="menu-text"><div class="menu-label" style="color:var(--danger);">Keluar</div><div class="menu-sub">Logout dari akun</div></div>
+          <div class="menu-arrow">›</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="setNav(0); goTo('home')"><div class="nav-icon">🏠</div><div class="nav-label">Beranda</div></button>
+      <button class="nav-item" onclick="setNav(1); goTo('wishlist')"><div class="nav-icon">🤍</div><div class="nav-label">Wishlist</div></button>
+      <button class="nav-item" onclick="openChatInbox()"><div class="nav-icon">💬</div><div class="nav-label">Chat</div></button>
+      <button class="nav-item active" onclick="setNav(3)"><div class="nav-icon">👤</div><div class="nav-label">Profil</div></button>
+    </div>
+  </div>
+
+  <!-- ===== CHECKOUT ===== -->
+  <div class="screen" id="screen-checkout">
+    <div class="header">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <div class="header-title">Checkout</div>
+      <div class="header-right"></div>
+    </div>
+    <div class="scroll-body">
+      <div class="checkout-section">
+        <div class="checkout-title">📍 Alamat Pengiriman</div>
+        <div class="address-card">
+          <div style="display:flex; justify-content:space-between; align-items:start;">
+            <div>
+              <div class="address-name"><span data-user-name>Rina Dewi</span> <span class="pill pill-blue">Utama</span></div>
+              <div class="address-text">Jl. Pemuda No. 12, Kel. Sekayu<br>Semarang Tengah, Jawa Tengah 50132<br>📱 +62 812-3456-7890</div>
+            </div>
+            <button onclick="showToast('📍 Ganti alamat')" style="background:none; border:1px solid var(--border); border-radius:8px; padding:4px 10px; font-size:11px; color:var(--primary); cursor:pointer; font-family:var(--font); font-weight:600;">Ganti</button>
+          </div>
+        </div>
+      </div>
+      <div class="checkout-section">
+        <div class="checkout-title">🛍️ Produk Dipesan</div>
+        <div id="checkout-products"></div>
+        <div style="margin-top:10px; background:var(--success-light); border-radius:8px; padding:8px 10px; font-size:11px; color:var(--success); font-weight:500;">
+          🚚 Estimasi tiba 2–3 hari · Gratis Ongkir via SiCepat
+        </div>
+      </div>
+      <div class="checkout-section">
+        <div class="checkout-title">💳 Metode Pembayaran</div>
+        <div class="payment-opt selected" id="pay-gopay" onclick="selectPay('gopay')">
+          <div class="payment-opt-icon">💚</div>
+          <div class="payment-opt-label">GoPay <span class="pill pill-success">Saldo Rp 250.000</span></div>
+          <div class="payment-opt-check" style="background:var(--primary); display:flex; align-items:center; justify-content:center; color:white; font-size:10px;">✓</div>
+        </div>
+        <div class="payment-opt" id="pay-bca" onclick="selectPay('bca')">
+          <div class="payment-opt-icon">🏦</div>
+          <div class="payment-opt-label">Transfer BCA</div>
+          <div class="payment-opt-check"></div>
+        </div>
+        <div class="payment-opt" id="pay-cod" onclick="selectPay('cod')">
+          <div class="payment-opt-icon">💵</div>
+          <div class="payment-opt-label">COD (Bayar di Tempat)</div>
+          <div class="payment-opt-check"></div>
+        </div>
+        <div class="payment-opt" id="pay-qris" onclick="selectPay('qris')">
+          <div class="payment-opt-icon">📲</div>
+          <div class="payment-opt-label">QRIS</div>
+          <div class="payment-opt-check"></div>
+        </div>
+        <div class="qris-panel" id="qris-panel" aria-live="polite">
+          <div class="qris-card">
+            <div class="qris-top">
+              <div>
+                <div class="qris-title">QRIS PasarKita</div>
+                <div class="qris-sub">Scan pakai e-wallet atau mobile banking</div>
+              </div>
+              <div class="qris-logo">QRIS</div>
+            </div>
+            <div class="qris-code" id="fake-qris-code"></div>
+            <div class="qris-amount" id="qris-amount">Rp 0</div>
+            <div class="qris-note">Kode QR simulasi untuk demo aplikasi</div>
+          </div>
+        </div>
+      </div>
+      <div class="checkout-section">
+        <div class="checkout-title">🧾 Ringkasan Pembayaran</div>
+        <div class="summary-row"><span>Harga produk</span><span id="checkout-subtotal">Rp 0</span></div>
+        <div class="summary-row"><span>Ongkos kirim</span><span id="checkout-shipping" style="color:var(--success);">Gratis</span></div>
+        <div class="summary-row"><span>Diskon voucher</span><span id="checkout-discount" style="color:var(--danger);">- Rp 0</span></div>
+        <div class="summary-row"><span>Biaya platform</span><span id="checkout-fee">Rp 0</span></div>
+        <div class="summary-row total"><span>Total Bayar</span><span id="checkout-total">Rp 0</span></div>
+      </div>
+      <div style="padding:0 16px 8px;">
+        <div style="display:flex; gap:8px; background:var(--warning-light); border-radius:var(--radius-md); padding:10px 12px; font-size:12px; color:var(--warning); align-items:center; font-weight:500;">
+          🎫 <span>Punya kode voucher? <a onclick="showToast('🎫 Masukkan kode voucher')" style="color:var(--primary); cursor:pointer; text-decoration:underline; font-weight:600;">Pakai di sini</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-action" style="flex-direction:column; gap:8px;">
+      <button class="btn-buy" id="checkout-pay-btn" onclick="placeOrder()" style="width:100%; height:52px; font-size:15px;">Bayar Sekarang · Rp 0</button>
+      <div style="text-align:center; font-size:11px; color:var(--text-3);">🔒 Transaksi aman & terenkripsi</div>
+    </div>
+  </div>
+
+  <!-- ===== NOTIFICATIONS ===== -->
+  <div class="screen" id="screen-notifications">
+    <div class="header">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <div class="header-title">Notifikasi 🔔</div>
+      <button class="icon-btn" onclick="markNotificationsRead()">✓</button>
+    </div>
+    <div class="scroll-body">
+      <div class="notif-tabs">
+        <button class="notif-tab active" onclick="filterNotifications('all', this)">Semua</button>
+        <button class="notif-tab" onclick="filterNotifications('order', this)">Checkout</button>
+        <button class="notif-tab" onclick="filterNotifications('chat', this)">Chat</button>
+        <button class="notif-tab" onclick="filterNotifications('payment', this)">Pembayaran</button>
+        <button class="notif-tab" onclick="filterNotifications('discount', this)">Diskon</button>
+      </div>
+      <div class="notif-list" id="notif-list"></div>
+    </div>
+  </div>
+
+  <!-- ===== FLASH SALE ===== -->
+  <div class="screen" id="screen-flash">
+    <div class="header">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <div class="header-title">Flash Sale ⚡</div>
+      <button class="icon-btn" onclick="refreshFlashSale()">↻</button>
+    </div>
+    <div class="scroll-body">
+      <div class="flash-hero">
+        <div>
+          <div class="flash-kicker">PROMO REALTIME</div>
+          <div class="flash-title">Produk pilihan harga spesial</div>
+          <div class="flash-sub" id="flash-countdown-screen">Berakhir dalam --</div>
+        </div>
+        <div class="flash-emoji">⚡</div>
+      </div>
+      <div class="section-header">
+        <div class="section-title">Cocok masuk Flash Sale</div>
+        <div class="section-link" onclick="refreshFlashSale()">Acak promo →</div>
+      </div>
+      <div class="flash-grid" id="flash-grid"></div>
+    </div>
+  </div>
+
+  <!-- ===== PROFILE CATALOG ===== -->
+  <div class="screen" id="screen-profile-catalog">
+    <div class="header">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <div class="header-title" id="profile-catalog-title">Katalog Profil</div>
+      <div class="header-right"></div>
+    </div>
+    <div class="scroll-body">
+      <div class="catalog-view-note">Mode lihat saja — data yang tersedia ditampilkan sesuai menu yang dipilih.</div>
+      <div class="catalog-list" id="profile-catalog-list"></div>
+    </div>
+  </div>
+
+  <!-- ===== CALL ===== -->
+  <div class="screen" id="screen-call">
+    <div class="call-screen">
+      <div class="call-status" id="call-status">Memanggil...</div>
+      <div class="call-avatar" id="call-avatar">🏪</div>
+      <div class="call-name" id="call-name">Toko</div>
+      <div class="call-sub" id="call-sub">PasarKita Voice</div>
+      <div class="call-timer" id="call-timer">00:00</div>
+      <div class="call-actions">
+        <button class="call-action" onclick="toggleMute()" id="call-mute">🎙️<span>Mute</span></button>
+        <button class="call-end" onclick="endCall()">📞</button>
+        <button class="call-action" onclick="showToast('🔊 Speaker aktif')">🔊<span>Speaker</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SELLER DASHBOARD ===== -->
+  <div class="screen" id="screen-seller">
+    <div class="header">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <div class="header-title">Dashboard Toko</div>
+      <button class="icon-btn" onclick="showToast('⚙️ Pengaturan toko')">⚙️</button>
+    </div>
+    <div class="scroll-body">
+      <div style="padding:12px 16px 0; display:flex; align-items:center; gap:10px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-mid));display:flex;align-items:center;justify-content:center;font-size:22px;">🏪</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--text-1);">Toko Batik Adi</div>
+          <div style="font-size:11px;color:var(--success);font-weight:500;">🟢 Toko Aktif · Terverifikasi ✓</div>
+        </div>
+        <button class="btn-primary" style="margin-left:auto; padding:6px 14px; height:auto; font-size:12px; border-radius:20px;" onclick="showToast('📦 Upload produk baru')">+ Produk</button>
+      </div>
+      <div class="dash-cards">
+        <div class="dash-card">
+          <div class="dash-card-icon">📦</div>
+          <div class="dash-card-val">12</div>
+          <div class="dash-card-label">Pesanan hari ini</div>
+          <div class="dash-card-trend trend-up">▲ +4 dari kemarin</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-icon">💰</div>
+          <div class="dash-card-val">Rp 1,8jt</div>
+          <div class="dash-card-label">Pendapatan hari ini</div>
+          <div class="dash-card-trend trend-up">▲ +22% minggu ini</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-icon">👁️</div>
+          <div class="dash-card-val">438</div>
+          <div class="dash-card-label">Pengunjung toko</div>
+          <div class="dash-card-trend trend-up">▲ +18% hari ini</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-icon">💬</div>
+          <div class="dash-card-val">7</div>
+          <div class="dash-card-label">Chat belum dibalas</div>
+          <div class="dash-card-trend trend-dn" style="cursor:pointer;" onclick="openChatInbox()">⚠️ Balas sekarang →</div>
+        </div>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-card-icon">⚠️</div>
+        <div>
+          <div class="alert-card-title">Stok hampir habis!</div>
+          <div class="alert-card-body">Kaos Polos Putih (S, M) — sisa 3 pcs. Batik Mega Mendung — sisa 2 pcs.<br><a style="color:var(--primary); font-weight:600; cursor:pointer;" onclick="showToast('📦 Halaman manajemen stok')">Kelola stok →</a></div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">Produk Terlaris Minggu Ini</div>
+        <div class="section-link">Lihat analitik →</div>
+      </div>
+      <div class="bar-chart">
+        <div class="bar-item">
+          <div class="bar-label"><span>👘 Batik Tulis Premium</span><span style="font-weight:600;color:var(--text-1);">47 terjual</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:78%;"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>🎨 Batik Mega Mendung</span><span style="font-weight:600;color:var(--text-1);">32 terjual</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:54%;"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>👕 Kaos Batik Modern</span><span style="font-weight:600;color:var(--text-1);">24 terjual</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:40%;"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>🧣 Selendang Batik Sutra</span><span style="font-weight:600;color:var(--text-1);">18 terjual</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:30%;"></div></div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">💡 Insight Toko</div>
+      </div>
+      <div style="padding:0 16px 12px; display:flex; flex-direction:column; gap:8px;">
+        <div style="background:var(--primary-light); border-radius:var(--radius-md); padding:12px; border:1px solid rgba(26,86,219,0.15); font-size:12px; color:var(--text-2); line-height:1.5;">
+          📊 <strong style="color:var(--primary);">Tip:</strong> 38 pembeli menyimpan Batik Tulis ke wishlist tanpa membeli. Coba beri diskon 10% untuk mendorong konversi!
+          <div style="margin-top:6px;"><a style="color:var(--primary); font-weight:600; cursor:pointer;" onclick="showToast('🎯 Buat promo khusus')">Buat promo sekarang →</a></div>
+        </div>
+        <div style="background:var(--success-light); border-radius:var(--radius-md); padding:12px; border:1px solid rgba(10,158,109,0.15); font-size:12px; color:var(--text-2); line-height:1.5;">
+          ⏰ <strong style="color:var(--success);">Jam ramai:</strong> Pembeli paling aktif pukul 12.00–14.00 dan 20.00–22.00. Jadwalkan flash sale di jam ini!
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-title">Pesanan Perlu Diproses</div>
+        <span class="menu-badge" style="font-size:11px;">3 baru</span>
+      </div>
+      <div style="padding:0 16px 16px; display:flex; flex-direction:column; gap:8px;">
+        <div class="product-row" style="margin:0; cursor:pointer;" onclick="showToast('📦 Proses pesanan #PK2024-001')">
+          <div class="product-row-img" style="background:#e8f0fd; font-size:20px;">👘</div>
+          <div class="product-row-info">
+            <div class="product-row-name">#PK2024-001 · Rina D.</div>
+            <div style="font-size:12px; color:var(--primary); font-weight:600;">Batik Tulis L · 1 pcs · Rp 185.000</div>
+            <div class="product-row-meta">Baru masuk · GoPay · Kemas segera</div>
+          </div>
+          <span class="pill pill-amber">Baru</span>
+        </div>
+        <div class="product-row" style="margin:0; cursor:pointer;" onclick="showToast('📦 Proses pesanan #PK2024-002')">
+          <div class="product-row-img" style="background:#e8f0fd; font-size:20px;">🎨</div>
+          <div class="product-row-info">
+            <div class="product-row-name">#PK2024-002 · Nita P.</div>
+            <div style="font-size:12px; color:var(--primary); font-weight:600;">Batik Mega Mendung · 12 pcs · Rp 1,86jt</div>
+            <div class="product-row-meta">30 mnt lalu · Transfer BCA</div>
+          </div>
+          <span class="pill pill-blue">Grosir</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
